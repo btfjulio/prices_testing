@@ -1,0 +1,23 @@
+{
+  "name": "prices_testing",
+  "version": "1.0.0",
+  "description": "test prices on the web app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/btfjulio/prices_testing.git"
+  },
+  "author": "btfjulio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/btfjulio/prices_testing/issues"
+  },
+  "homepage": "https://github.com/btfjulio/prices_testing#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "puppeteer": "^2.0.0"
+  }
+}
