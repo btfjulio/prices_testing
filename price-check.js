@@ -35,7 +35,7 @@ prods = [
     { link: 'http://bit.ly/2ENYiwl', price: '39' },
     { link: 'http://bit.ly/391on9d', price: '295' },
     { link: 'http://bit.ly/2OWNIt0', price: '99' },
-    { link: 'http://bit.ly/2S7MLjr', price: '97' },''
+    { link: 'http://bit.ly/2S7MLjr', price: '97' },
     { link: 'http://bit.ly/2tzb5Rj', price: '98' },
     { link: 'https://amzn.to/2PXhT2D', price: '128' },
     { link: 'http://bit.ly/2toJlOY', price: '84' },
@@ -56,10 +56,22 @@ prods = [
     { link: 'http://bit.ly/34S0kXC', price: '38' }
 ]
 
+async function checkDiscount(prod, page) {
+    const website = page.url().match(/(?<=www.)(.*)(?=\.com)/)[0];
+    const webpagePriceTag = Helpers.stores[website].priceTag;
+    if(webpagePriceTag) {
+        await page.waitForSelector(webpagePriceTag);
+        const currentPrice = await page.evaluate((webpagePriceTag) => document.querySelector(webpagePriceTag).innerText.replace(/[^0-9]/g, ''), webpagePriceTag);
+        console.log(Math.floor(currentPrice/100) == prod.price);
+    }
+    return; 
+}
+
 async function visitPages(prods, page) {
     for (var i = 0; i < prods.length; i++) {
         await page.goto(prods[i].link);
-        await Helpers.sleep(50000);
+        await Helpers.sleep(2000);
+        prods[i].discount = await checkDiscount(prods[i], page);
     }
 }
 
