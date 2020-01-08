@@ -7,15 +7,22 @@ module.exports = {
     stores: {
         'lojacorpoperfeito': {
             priceTag: '.shefp-descount-price',
+            notAvailableTag:'.alertMe > span'
         },
         'boasaudesuplementos': {
             priceTag: '.skuDescountPrice',
+            notAvailableTag:'.bss-price'
         },
         'corpoidealsuplementos': {
             priceTag: '.instant-price',
-        },
-        'netshoes': {
-            priceTag: '.price__currency',
+            notAvailableTag:'.bt-notifyme'
         }
+        // 'netshoes': {
+        //     priceTag: '.price__currency',
+        // },
+        // 'amazon': {
+        //     priceTag: '.a-color-price'
+        // }
     }
 } 
+

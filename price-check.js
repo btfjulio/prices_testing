@@ -56,23 +56,26 @@ prods = [
     { link: 'http://bit.ly/34S0kXC', price: '38' }
 ]
 
-async function checkDiscount(prod, page) {
-    const website = page.url().match(/(?<=www.)(.*)(?=\.com)/)[0];
+async function checkDiscount(prod, page, website) {
     const webpagePriceTag = Helpers.stores[website].priceTag;
     if(webpagePriceTag) {
-        await page.waitForSelector(webpagePriceTag);
-        const currentPrice = await page.evaluate((webpagePriceTag) => document.querySelector(webpagePriceTag).innerText.replace(/[^0-9]/g, ''), webpagePriceTag);
-        console.log(Math.floor(currentPrice/100) == prod.price);
+        const currentPrice = await page.evaluate((webpagePriceTag) => {
+            let price = document.querySelector(webpagePriceTag);
+            return price ? price.innerText.replace(/[^0-9]/g, '') : null 
+        }, webpagePriceTag)
+        return currentPrice ? Math.floor(currentPrice/100) == prod.price : 'no price found';
     }
-    return; 
+    return 'no price found'
 }
 
 async function visitPages(prods, page) {
     for (var i = 0; i < prods.length; i++) {
         await page.goto(prods[i].link);
         await Helpers.sleep(2000);
-        prods[i].discount = await checkDiscount(prods[i], page);
+        const website = page.url().match(/(?<=www.)(.*)(?=\.com)/)[0];
+        prods[i].discount = await checkDiscount(prods[i], page, website);
     }
+    return prods
 }
 
 async function discountCheck(prods) {
