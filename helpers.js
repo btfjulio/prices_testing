@@ -35,7 +35,11 @@ module.exports = {
         //     notAvailableTag: Produto indisponível 'text-not-avaliable'
         },
         'amazon': {
-            priceTag: '.a-color-price'
+            priceTag: '.a-color-price',
+            notAvailableTag: {
+                class: '.a-color-price',
+                text: 'Não disponível.'
+            }
         }
     }
 } 

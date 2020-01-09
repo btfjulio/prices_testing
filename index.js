@@ -1,6 +1,5 @@
 const puppeteer = require('puppeteer');
 
-
 async function autoScroll(page){
     await page.evaluate(async () => {
         await new Promise((resolve, reject) => {
@@ -17,11 +16,6 @@ async function autoScroll(page){
             }, 100);
         });
     });
-}
-
-
-async function sleep(miliseconds) {
-    return new Promise(resolve => setTimeout(resolve, miliseconds));
 }
 
 async function scrapeIndexProducts(page, url) {
@@ -42,8 +36,8 @@ async function scrapeIndexProducts(page, url) {
 
 async function scrapeProductsDesc(linksToCheck, page) {
     const products = [];
-    for (var i = 0; i < linksToCheck.length; i++) {
-        await page.goto(linksToCheck[i]);
+    for (let linkToCheck of linksToCheck) {
+        await page.goto(linkToCheck);
         await page.waitForSelector('h1');
         const price = await page.evaluate(() => {
             let price = document.querySelectorAll('h1')[1].innerText.match(/\$([0-9\.]+)\b/g);

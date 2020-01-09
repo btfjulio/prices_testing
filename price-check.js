@@ -1,4 +1,4 @@
-const Helpers = require('./helpers')
+const {stores, sleep} = require('./helpers')
 const puppeteer = require('puppeteer');
 
 const prods = [ 
@@ -60,12 +60,12 @@ const prods = [
 
 
 async function checkDiscount(prod, page, website) {
-    const webpagePriceTag = Helpers.stores[website].priceTag;
-    if(webpagePriceTag) {
-        const currentPrice = await page.evaluate((webpagePriceTag) => {
-            let price = document.querySelector(webpagePriceTag);
+    const { priceTag } = stores[website];
+    if(priceTag) {
+        const currentPrice = await page.evaluate((priceTag) => {
+            let price = document.querySelector(priceTag);
             return price ? price.innerText.replace(/[^0-9]/g, '') : null 
-        }, webpagePriceTag)
+        }, priceTag)
         console.log(Math.floor(currentPrice/100), prod.price)
         return currentPrice ? Math.floor(currentPrice/100) > prod.price : 'no price found';
     }
@@ -73,12 +73,12 @@ async function checkDiscount(prod, page, website) {
 }
 
 async function checkAvailability(page, website) {
-    const webpageAvailableTag = Helpers.stores[website].notAvailableTag;
-    if(webpageAvailableTag) {
-        const currentAvailability = await page.evaluate((webpageAvailableTag) => {
-            let availability = document.querySelector(webpageAvailableTag.class);
-            return availability ? availability.innerText ===  webpageAvailableTag.text : null 
-        }, webpageAvailableTag)
+    const { notAvailableTag } = stores[website];
+    if(notAvailableTag) {
+        const currentAvailability = await page.evaluate((notAvailableTag) => {
+            let availability = document.querySelector(notAvailableTag.class);
+            return availability ? availability.innerText ===  notAvailableTag.text : null 
+        }, notAvailableTag)
         return currentAvailability ? 'not available' : 'available';
     }
     return 'availability no found'
@@ -86,13 +86,13 @@ async function checkAvailability(page, website) {
 
 
 async function visitPages(prods, page) {
-    for (var i = 0; i < prods.length; i++) {
-        await page.goto(prods[i].link);
-        await Helpers.sleep(2000);
+    for (let prod of prods) {
+        await page.goto(prod.link);
+        await sleep(5000);
         const website = page.url().match(/(?<=(www|m).)(.*)(?=\.com)/)[0];
-        prods[i].discount = await checkDiscount(prods[i], page, website);
-        prods[i].availability = await checkAvailability(page, website);
-        console.log(prods[i])
+        prod.discount = await checkDiscount(prod, page, website);
+        prod.availability = await checkAvailability(page, website);
+        console.log(prod)
     }
     return prods
 }
