@@ -7,22 +7,36 @@ module.exports = {
     stores: {
         'lojacorpoperfeito': {
             priceTag: '.shefp-descount-price',
-            notAvailableTag:'.alertMe > span'
+            notAvailableTag: {
+                class: '.alertMe > span',
+                text: 'Avise-me quando estiver disponível'
+            }
         },
         'boasaudesuplementos': {
             priceTag: '.skuDescountPrice',
-            notAvailableTag:'.bss-price'
+            notAvailableTag: {
+                class: '.bss-price',
+                text: 'Produto indisponível'
+            }
         },
         'corpoidealsuplementos': {
             priceTag: '.instant-price',
-            notAvailableTag:'.bt-notifyme'
+            notAvailableTag: {
+                class: '.bt-notifyme',
+                text: 'AVISE-ME QUANDO CHEGAR'
+            }
+        },
+        'netshoes': {
+            priceTag: '.price__currency',
+            notAvailableTag: {
+            class: '.tell-me-button-wrapper > .title',
+            text: 'Produto indisponível'
         }
-        // 'netshoes': {
-        //     priceTag: '.price__currency',
-        // },
-        // 'amazon': {
-        //     priceTag: '.a-color-price'
-        // }
+        //     notAvailableTag: Produto indisponível 'text-not-avaliable'
+        },
+        'amazon': {
+            priceTag: '.a-color-price'
+        }
     }
 } 
 
