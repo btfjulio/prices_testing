@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const discountCheck = require('./price-check')
 
 async function autoScroll(page){
     await page.evaluate(async () => {
@@ -51,7 +52,7 @@ async function scrapeProductsDesc(linksToCheck, page) {
         const link = await page.evaluate(() => document.querySelectorAll('a')[7].href) 
         products.push({link, price});
     };
-    console.log(products);
+    return products;
 }
 
 async function main() {
@@ -66,6 +67,10 @@ async function main() {
             linksToCheck,
             page
          );
+    const testedProducts = await discountCheck(
+        productsToTest,
+        page
+     ); 
     await browser.close();
     return;
 }
