@@ -31,8 +31,7 @@ module.exports = {
             notAvailableTag: {
             class: '.tell-me-button-wrapper > .title',
             text: 'Produto indisponível'
-        }
-        //     notAvailableTag: Produto indisponível 'text-not-avaliable'
+            }
         },
         'amazon': {
             priceTag: '.a-color-price',

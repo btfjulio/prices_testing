@@ -18,7 +18,7 @@ async function checkAvailability(page, website) {
     const { notAvailableTag } = stores[website];
     if(notAvailableTag) {
         const currentAvailability = await page.evaluate((notAvailableTag) => {
-            let availability = document.querySelector(notAvailableTag.class);
+            let availability = document.querySelector(notAvailableTag.class); 
             return availability ? availability.innerText ===  notAvailableTag.text : null 
         }, notAvailableTag)
         return currentAvailability ? 'not available' : 'available';
