@@ -1,5 +1,12 @@
-const {stores, sleep} = require('./helpers')
+const { stores, sleep } = require('./helpers')
 const puppeteer = require('puppeteer');
+
+async function chageToDesktop(page) {
+    const newUrl = page.url().replace(/(http|https):\/\/m\./, 'https://www.');
+    await page.goto(newUrl);
+    await sleep(5000);
+    return;
+};
 
 async function checkDiscount(prod, page, website) {
     const { priceTag } = stores[website];
@@ -7,24 +14,24 @@ async function checkDiscount(prod, page, website) {
         const currentPrice = await page.evaluate((priceTag) => {
             let price = document.querySelector(priceTag);
             return price ? price.innerText.replace(/[^0-9]/g, '') : null 
-        }, priceTag)
-        console.log(Math.floor(currentPrice/100), prod.price)
+        }, priceTag);
+        console.log(Math.floor(currentPrice/100), prod.price);
         return currentPrice ? Math.floor(currentPrice/100) > prod.price : 'no price found';
     }
-    return 'no price found'
-}
+    return 'no price found';
+};
 
 async function checkAvailability(page, website) {
     const { notAvailableTag } = stores[website];
     if(notAvailableTag) {
         const currentAvailability = await page.evaluate((notAvailableTag) => {
             let availability = document.querySelector(notAvailableTag.class); 
-            return availability ? availability.innerText ===  notAvailableTag.text : null 
-        }, notAvailableTag)
+            return availability ? availability.innerText ===  notAvailableTag.text : null;
+        }, notAvailableTag);
         return currentAvailability ? 'not available' : 'available';
     }
-    return 'availability no found'
-}
+    return 'availability no found';
+};
 
 
 async function discountCheck(prods, page) {
@@ -32,11 +39,12 @@ async function discountCheck(prods, page) {
         await page.goto(prod.link);
         await sleep(5000);
         const website = page.url().match(/(?<=(www|m).)(.*)(?=\.com)/)[0];
+        if (page.url().match(/(http|https):\/\/m\./)) { await chageToDesktop(page) };
         prod.discount = await checkDiscount(prod, page, website);
         prod.availability = await checkAvailability(page, website);
-        console.log(prod)
+        console.log(prod);
     }
-    return prods
-}
+    return prods;
+};
 
-module.exports = discountCheck
+module.exports = discountCheck;
