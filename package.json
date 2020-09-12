@@ -20,7 +20,7 @@
     "axios": "^0.19.1",
     "cheerio": "^1.0.0-rc.3",
     "esm": "^3.2.25",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "puppeteer": "^2.0.0"
   },
   "devDependencies": {},
